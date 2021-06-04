@@ -41,6 +41,7 @@ def gen_config(services):
     config['http'] = []
     config['worker_processes'] = 2
     config['events'] = {'worker_connections':4096}
+    config['daemon'] = 'off'
     for name, servers in services.items():
         config['http'].append(('upstream {}'.format(name), [('server', '{}'.format(server)) for server in servers]))
         serv_info = dict()
@@ -53,4 +54,5 @@ def gen_config(services):
 
 
 if __name__ == '__main__':
-    print(gen_config(get_list(sys.argv[1])))
+    fout = open('nginx.conf', 'w')
+    print(gen_config(get_list(sys.argv[1])), file=fout)
